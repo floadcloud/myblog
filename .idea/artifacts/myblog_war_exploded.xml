@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="myblog:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/myblog_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="myblog/web/Web" />
+    </root>
+  </artifact>
+</component>

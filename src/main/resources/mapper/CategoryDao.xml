@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.floadcloud.myblog.dao.CategoryDao">
+    <select id="queryById" parameterType="long" resultType="Category" >
+      SELECT
+        *
+      FROM
+        category
+      WHERE
+        category_id=#{id}
+    </select>
+
+    <select id="queryAll" resultType="Category">
+        SELECT
+          *
+        FROM
+         category
+        ORDER BY
+          category_id
+        LIMIT #{offset}, #{limit}
+    </select>
+    
+    <insert id="add" parameterType="Category" keyProperty="categoryId">
+        INSERT INTO
+          category(name)
+        VALUES(#{name})
+    </insert>
+
+    <update id="update" parameterType="Category">
+        UPDATE
+          category
+        SET
+          name=#{name}
+        WHERE
+          category_id=#{categoryId}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM
+          category
+        WHERE
+          category_id=#{id}
+    </delete>
+</mapper>

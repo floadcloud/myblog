@@ -1,6 +1,7 @@
 package com.floadcloud.myblog.dao;
 
 import com.floadcloud.myblog.entity.Article;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface ArticleDao {
      * @param limit 查询条数
      * @return
      */
-    List<Article> queryAll(int offset, int limit);
+    List<Article> queryAll(@Param("offset") int offset,@Param("limit") int limit);
 
     /**
      * 新增文章

@@ -19,21 +19,23 @@
         FROM
           article
         ORDER BY
-          carticle_id
+          article_id
         LIMIT #{offset}, #{limit}
     </select>
 
-    <insert id="add" parameterType="Article">
+    <insert id="add" parameterType="Article" keyProperty="articleId">
         INSERT INTO
-          article(name)
-        VALUES(#{name})
+          article(category_id,title,content,create_time)
+        VALUES(#{categoryId},#{title},#{content},#{createTime})
     </insert>
 
     <update id="update" parameterType="Article">
         UPDATE
             article
         SET
-            name=#{name}
+            category_id=#{categoryId},
+            title=#{title},
+            content=#{content}
         WHERE
            article_id=#{articleId}
     </update>

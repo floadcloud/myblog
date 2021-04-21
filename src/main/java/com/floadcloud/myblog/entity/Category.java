@@ -1,8 +1,17 @@
 package com.floadcloud.myblog.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * Created by luohuilong on 2017/4/30.
  */
+@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     private long categoryId;

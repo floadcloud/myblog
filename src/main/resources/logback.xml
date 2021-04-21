@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <property name="defaultPattern" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{12} %msg%rEx{full,
+                java.lang.Thread,
+                javassist,
+                sun.reflect,
+                org.springframework,
+                org.apache,
+                org.eclipse.jetty,
+                $Proxy,
+                java.net,
+                java.io,
+                javax.servlet,
+                org.junit,
+                com.mysql,
+                com.sun,
+                org.mybatis.spring,
+                cglib,
+                CGLIB,
+                java.util.concurrent,
+                okhttp,
+                org.jboss,
+                }%n"/>
+
+    <appender name="AppLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${catalina.home}/logs/app.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${catalina.home}/logs/app.%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+            <maxHistory>7</maxHistory>
+            <maxFileSize>1GB</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${defaultPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CRM_ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>2048</queueSize>
+        <appender-ref ref="AppLog"/>
+    </appender>
+
+    <!--开启tcp格式的logstash传输，通过TCP协议连接Logstash-->
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>127.0.0.1:9600</destination>
+
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <jsonFactoryDecorator class="net.logstash.logback.decorate.CharacterEscapesJsonFactoryDecorator">
+                <escape>
+                    <targetCharacterCode>10</targetCharacterCode>
+                    <escapeSequence>\u2028</escapeSequence>
+                </escape>
+            </jsonFactoryDecorator>
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "timestamp":"%date{ISO8601}",
+                        "user":"test",
+                        "message":"[%d{yyyy-MM-dd HH:mm:ss.SSS}][%p][%t][%l{80}|%L]%m"}%n
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+        <keepAliveDuration>5 minutes</keepAliveDuration>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CRM_ASYNC"/>
+        <appender-ref ref="STASH"/>
+    </root>
+</configuration>
